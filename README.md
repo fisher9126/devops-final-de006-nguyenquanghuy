@@ -26,28 +26,32 @@ devops-final-de006-nguyenvana/     ← Mã nguồn Spring Boot 4 (Java 21, Gradl
 ├── src/main/resources/application.properties
 ├── build.gradle                   ← Build ra file build/libs/app.jar
 ├── settings.gradle
-├── Dockerfile                     ← ★ FILE KHUNG: tự hoàn chỉnh phần còn thiếu
+├── Dockerfile                     ← Multi-stage build: Gradle/JDK 21 → JRE 21
 ├── .dockerignore                  ← CÓ SẴN
-├── nginx/default.conf             ← ★ FILE KHUNG: tự đổi PORT (tránh trùng nhau)
+├── nginx/default.conf             ← Nginx reverse proxy
 ├── database/init.sql              ← Bảng students + 8 bản ghi mẫu – CÓ SẴN
-├── docker-compose.yml             ← ★ FILE KHUNG: mysql có sẵn, điền TODO 1–5
-├── .github/workflows/ci-cd.yml    ← ★ FILE KHUNG: điền TODO 1–6
-├── student.env                    ← ★ ĐIỀN THÔNG TIN SINH VIÊN
+├── docker-compose.yml             ← MySQL, Spring Boot và Nginx
+├── .github/workflows/ci-cd.yml    ← Build, smoke test, push GHCR và deploy qua SSH
+├── student.env                    ← Thông tin sinh viên và cấu hình MySQL/deploy
 ├── screenshots/                   ← ★ Ảnh minh chứng (Phần 5)
 ├── submission-content/            ← ★ Toàn bộ tệp minh chứng khi nộp bài
 ├── .gitignore                     ← CÓ SẴN
 └── README.md
 ```
 
-Phần **sinh viên phải làm** (xem đề thi):
+Các cấu hình cần hoàn tất trước khi chạy:
 
 | File | Việc cần làm |
 |------|--------------|
-| `student.env` | Điền thông tin sinh viên và thông số triển khai |
-| `Dockerfile` | **Hoàn chỉnh**: multi-stage build, stage `build` (Gradle + JDK 21) và stage runtime (JRE 21) |
-| `docker-compose.yml` | **Điền các TODO 1–5** (service `mysql` đã có sẵn) |
-| `.github/workflows/ci-cd.yml` | **Điền các TODO 1–6** của pipeline build → push image → deploy |
+| `student.env` | Điền tài khoản/mật khẩu MySQL; không dùng `root` làm `MYSQL_USER` |
+| GitHub Actions Secrets | Thêm `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY` để bật deploy |
 | `screenshots/` | `01-actions.png`, `02-ghcr.png`, `03-compose-ps.png`, `04-website.png` |
+
+`student.env` được workflow đọc trực tiếp và chứa thông tin xác thực dạng văn bản
+thuần; repository public sẽ làm lộ các giá trị đã điền. Chỉ dùng thông tin riêng,
+dùng một lần cho bài thực hành và rotate ngay sau khi chấm. Thêm public key deploy
+vào `~/.ssh/authorized_keys` trên server và lưu private key trong GitHub Secret
+`SERVER_SSH_KEY`.
 
 ## API của ứng dụng
 
